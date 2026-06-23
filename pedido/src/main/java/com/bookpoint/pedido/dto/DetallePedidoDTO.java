@@ -8,6 +8,8 @@ import lombok.Data;
 public class DetallePedidoDTO {
     private Long productoId;
 
+    private String sku;
+
     private TipoProducto tipoProducto;
 
     private String nombreProducto;

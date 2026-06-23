@@ -44,6 +44,10 @@ public class PedidoService {
                                                         .toString()
                                         )
                                 )
+                                .sku(
+                                        p.get("sku")
+                                                .toString()
+                                )
                                 .tipoProducto(
                                         TipoProducto.valueOf(
                                                 p.get("tipoProducto")
@@ -57,6 +61,12 @@ public class PedidoService {
                                 .precio(
                                         Integer.valueOf(
                                                 p.get("precio")
+                                                        .toString()
+                                        )
+                                )
+                                .cantidad(
+                                        Integer.valueOf(
+                                                p.get("cantidad")
                                                         .toString()
                                         )
                                 )

@@ -16,12 +16,16 @@ import lombok.NoArgsConstructor;
 public class DetallePedido {
     private Long productoId;
 
+    private String sku;
+
     @Enumerated(EnumType.STRING)
     private TipoProducto tipoProducto;
 
     private String nombreProducto;
 
     private Integer precio;
+
+    private Integer cantidad;
 
     private Long sucursalId;
 }

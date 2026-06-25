@@ -34,9 +34,6 @@ public class Pedido {
     private Long usuarioId;
 
     @Column(nullable = false)
-    private Long carritoId;
-
-    @Column(nullable = false)
     private Long ventaId;
 
     @Column(nullable = false)

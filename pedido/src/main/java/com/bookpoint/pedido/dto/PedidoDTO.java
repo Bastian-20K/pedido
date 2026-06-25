@@ -6,8 +6,6 @@ import lombok.Data;
 public class PedidoDTO {
     private Long usuarioId;
 
-    private Long carritoId;
-
     private Long ventaId;
 
     private String direccion;

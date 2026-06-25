@@ -25,15 +25,28 @@ public class PedidoService {
     private final RestTemplate restTemplate;
 
     public Pedido crearPedido(PedidoDTO request) {
-        String url = "http://localhost:8086/api/v1/carritos/" + request.getCarritoId();
-        Map<String, Object> carrito = restTemplate.getForObject(url, Map.class);
-        if (carrito == null) {
-            throw new RuntimeException(
-                    "Carrito no encontrado");
-        }
-    
+        String url =
+                "http://localhost:8085/api/v1/ventas/"
+                + request.getVentaId();
 
-        List<Map<String, Object>> detallesMap = (List<Map<String, Object>>) carrito.get("detalleCarrito");
+
+        Map<String,Object> venta =
+                restTemplate.getForObject(
+                        url,
+                        Map.class
+                );
+
+
+        if (venta == null) {
+                throw new RuntimeException(
+                "Venta no encontrada"
+                );
+        }
+
+
+        List<Map<String,Object>> detallesMap =
+                (List<Map<String,Object>>)
+                        venta.get("detalleProductos");
 
         List<DetallePedido> detalles =
                 detallesMap.stream()
@@ -82,7 +95,6 @@ public class PedidoService {
         Pedido pedido =
                 Pedido.builder()
                         .usuarioId(request.getUsuarioId())
-                        .carritoId(request.getCarritoId())
                         .ventaId(request.getVentaId())
                         .direccion(request.getDireccion())
                         .detalleProductos(detalles)

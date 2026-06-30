@@ -2,17 +2,14 @@ package com.bookpoint.pedido.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.bookpoint.pedido.dto.EstadoPedidoDTO;
 import com.bookpoint.pedido.dto.PedidoDTO;
 import com.bookpoint.pedido.model.DetallePedido;
 import com.bookpoint.pedido.model.EstadoPedido;
 import com.bookpoint.pedido.model.Pedido;
-import com.bookpoint.pedido.model.TipoProducto;
 import com.bookpoint.pedido.repository.PedidoRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -22,73 +19,21 @@ import lombok.RequiredArgsConstructor;
 public class PedidoService {
     private final PedidoRepository repository;
 
-    private final RestTemplate restTemplate;
 
     public Pedido crearPedido(PedidoDTO request) {
-        String url =
-                "http://localhost:8085/api/v1/ventas/"
-                + request.getVentaId();
-
-
-        Map<String,Object> venta =
-                restTemplate.getForObject(
-                        url,
-                        Map.class
-                );
-
-
-        if (venta == null) {
-                throw new RuntimeException(
-                "Venta no encontrada"
-                );
-        }
-
-
-        List<Map<String,Object>> detallesMap =
-                (List<Map<String,Object>>)
-                        venta.get("detalleProductos");
+        
 
         List<DetallePedido> detalles =
-                detallesMap.stream()
+                request.getDetalleProductos()
+                        .stream()
                         .map(p -> DetallePedido.builder()
-                                .productoId(
-                                        Long.valueOf(
-                                                p.get("productoId")
-                                                        .toString()
-                                        )
-                                )
-                                .sku(
-                                        p.get("sku")
-                                                .toString()
-                                )
-                                .tipoProducto(
-                                        TipoProducto.valueOf(
-                                                p.get("tipoProducto")
-                                                        .toString()
-                                        )
-                                )
-                                .nombreProducto(
-                                        p.get("nombreProducto")
-                                                .toString()
-                                )
-                                .precio(
-                                        Integer.valueOf(
-                                                p.get("precio")
-                                                        .toString()
-                                        )
-                                )
-                                .cantidad(
-                                        Integer.valueOf(
-                                                p.get("cantidad")
-                                                        .toString()
-                                        )
-                                )
-                                .sucursalId(
-                                        Long.valueOf(
-                                                p.get("sucursalId")
-                                                        .toString()
-                                        )
-                                )
+                                .productoId(p.getProductoId())
+                                .sku(p.getSku())
+                                .tipoProducto(p.getTipoProducto())
+                                .nombreProducto(p.getNombreProducto())
+                                .precio(p.getPrecio())
+                                .cantidad(p.getCantidad())
+                                .sucursalId(p.getSucursalId())
                                 .build())
                         .toList();
 
@@ -129,7 +74,9 @@ public class PedidoService {
             EstadoPedidoDTO request) {
         Pedido pedido =
                 buscarPorId(pedidoId);
+
         pedido.setEstado(request.getEstado());
+
         return repository.save(pedido);
     }
 }
